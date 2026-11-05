@@ -329,7 +329,8 @@ img.fig{opacity:.2;object-fit:contain}
 .fab{position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,calc(env(safe-area-inset-bottom,0px) + 12px));z-index:15;font:500 13px/1 var(--body);background:var(--accent-strong);color:var(--on-accent);border:0;border-radius:999px;padding:12px 18px;cursor:pointer;box-shadow:0 6px 20px rgba(28,43,61,.3);animation:rise .4s var(--ease) both}
 
 /* ---------- intros ---------- */
-#intro{position:fixed;inset:0;z-index:50;overflow:hidden;cursor:pointer;display:grid;place-items:center;user-select:none;-webkit-user-select:none}
+#intro{position:relative;z-index:2;width:100%;height:100vh;height:100svh;overflow:hidden;cursor:pointer;display:grid;place-items:center;user-select:none;-webkit-user-select:none}
+#intro.ended .skip{opacity:0;pointer-events:none;transition:opacity .4s}
 #intro .stage{position:absolute;inset:0;display:grid;place-items:center}
 #intro .skip{position:absolute;right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,calc(env(safe-area-inset-bottom,0px) + 12px));z-index:3;font:500 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:inherit;background:transparent;border:1px solid currentColor;border-radius:999px;padding:9px 14px 11px;cursor:pointer;opacity:.6;transition:opacity .2s;overflow:hidden;animation:skipin .5s .5s backwards}
 #intro .skip:focus-visible{opacity:1;outline:2px solid currentColor;outline-offset:3px}
@@ -523,7 +524,7 @@ img.fig{opacity:.2;object-fit:contain}
   "contactHeading": "Let's build",
   "contactAccent": "something.",
   "contactIntro": "Open to internships, research and team projects. The fastest way to reach me is email.",
-  "footerLeft": "Noah Tau · 2026",
+  "footerLeft": "Noah Tau",
   "footerRight": "Taipei, Taiwan"
  },
  "contacts": [
@@ -1124,7 +1125,7 @@ function contactBand() {
   return `<div class="cband"><div class="wrap">
     <div><h2>${T("site.contactHeading", "Heading")} <em>${T("site.contactAccent", "accent")}</em></h2>${T("site.contactIntro", "A line about what you're open to", "p")}</div>
     <div class="cta">${contactButtons(true)}</div>
-    ${S.site.intro !== "none" && !REDUCED ? `<div class="foot"><span></span><button class="linkish" data-act="replay">Replay intro</button></div>` : ""}
+    <div class="foot">${T("site.footerLeft", "Footer left", "span", "label")}${S.site.intro !== "none" && !REDUCED ? `<button class="linkish" data-act="replay">Replay intro</button>` : ""}</div>
   </div></div>`;
 }
 
@@ -1491,16 +1492,16 @@ function reveal() {
     if (el.getBoundingClientRect().top > innerHeight * .96) { el.classList.add("pending"); io.observe(el); }
   });
 }
-const railCache = { rail: null, car: null, screw: null, w: 0, max: 0, figs: [] };
+const railCache = { rail: null, car: null, screw: null, w: 0, max: 0, top: 0, figs: [] };
 function progress() {
   const C = railCache;
   if (!C.rail || !C.rail.isConnected || !C.w) {
     C.rail = root.querySelector(".rail"); if (!C.rail) return;
     C.car = C.rail.querySelector(".car"); C.screw = C.rail.querySelector(".screw");
-    C.w = C.rail.clientWidth; C.max = document.documentElement.scrollHeight - innerHeight;
+    C.top = root.offsetTop; C.w = C.rail.clientWidth; C.max = document.documentElement.scrollHeight - innerHeight - C.top;
     C.figs = [...root.querySelectorAll(".fig")];
   }
-  const k = C.max > 0 ? Math.min(1, Math.max(0, scrollY / C.max)) : 0;
+  const k = C.max > 0 ? Math.min(1, Math.max(0, (scrollY - C.top) / C.max)) : 0;
   const car = C.car, screw = C.screw;
   const travel = C.w - 29 - 8 - 34;
   car.style.transform = `translate3d(${(k * travel).toFixed(1)}px,0,0)`;
@@ -1633,7 +1634,7 @@ const INTROS = {
         moves.push({ kind: "rapid", ...withLen([pos, home]) });
         return moves;
       }
-      let rough = null, finish = null;
+      let rough = null, finish = null, wordMask = null;
       function build() {
         layout();
         const R = [], Fper = [];
@@ -1653,6 +1654,7 @@ const INTROS = {
         const lm = document.createElement("canvas"); lm.width = W; lm.height = H;
         const lx = lm.getContext("2d", { willReadFrequently: true }); lx.font = FONT(fs); lx.fillText(word, x0, baseY);
         const let_ = lx.getImageData(0, 0, W, H).data;
+        wordMask = new Uint8Array(W * H); for (let k = 0; k < W * H; k++) wordMask[k] = let_[k * 4 + 3] > 30 ? 1 : 0;
         const miss = new Uint8Array(W * H);
         // a pixel only counts as cut if it and all its neighbours are fully covered (no hairline seams)
         const full = k => cov[k * 4 + 3] >= 250;
@@ -1723,20 +1725,26 @@ const INTROS = {
         g.font = '500 8px "DM Mono", ui-monospace, monospace'; g.fillText("X", ox0 + 28, oy0 + 3); g.fillText("Y", ox0 - 2.5, oy0 - 29); g.fillText("G54", ox0 + 8, oy0 + 11);
       }
       // swarf: chips fly off the side of the cutter, skid to a stop and stay on the stock until the air blast
-      const CHIP = ["#CBB497", "#DCCBB2", "#B99D7C", "#E6D9C6"], chips = [];
+      const CHIP = ["#5A463D", "#4E3C33", "#6B5546", "#3E302A"], chips = [];
+      const onWord = (x, y) => { if (!wordMask) return false; const i = (y | 0) * W + (x | 0); return x >= 0 && y >= 0 && x < W && y < H && wordMask[i] === 1; };
       function emit(x, y, dx, dy, n) {
         const base = Math.atan2(dy, dx);
         for (let i = 0; i < n; i++) {
-          const ang = base + (Math.random() < .5 ? 1 : -1) * (Math.PI / 2 + (Math.random() - .3) * .9), v = 1 + Math.random() * 2.8;
+          const ang = base + (Math.random() < .5 ? 1 : -1) * (Math.PI / 2 + (Math.random() - .3) * .9), v = 2.4 + Math.random() * 3.6;
           chips.push({ x, y, vx: Math.cos(ang) * v, vy: Math.sin(ang) * v, rot: Math.random() * 6.3, vr: (Math.random() - .5) * .7, s: .7 + Math.random() * 1.5, c: CHIP[(Math.random() * 4) | 0], life: 0 });
         }
         if (chips.length > 160) chips.splice(0, chips.length - 160);
       }
-      function chip(g, p, alpha) { g.save(); g.globalAlpha = alpha; g.translate(p.x, p.y); g.rotate(p.rot); g.strokeStyle = p.c; g.lineWidth = Math.max(.6, p.s * .55); g.lineCap = "round"; g.beginPath(); g.arc(0, 0, p.s, 0, 2.5); g.stroke(); g.restore(); }
+      function chip(g, p, alpha) {
+        g.save(); g.globalAlpha = alpha; g.translate(p.x, p.y); g.rotate(p.rot);
+        if (p.s < 1.05) { g.fillStyle = p.c; g.beginPath(); g.ellipse(0, 0, p.s * .9, p.s * .55, 0, 0, 7); g.fill(); }        // fine dust
+        else { g.strokeStyle = p.c; g.lineWidth = Math.max(.6, p.s * .5); g.lineCap = "round"; g.beginPath(); g.arc(0, 0, p.s, 0, 2.5); g.stroke(); }   // a curled shaving
+        g.restore();
+      }
       function stepChips() {
         for (let i = chips.length - 1; i >= 0; i--) {
           const p = chips[i]; p.x += p.vx; p.y += p.vy; p.vx *= .84; p.vy *= .84; p.rot += p.vr; p.vr *= .9;
-          if (++p.life > 45 || Math.abs(p.vx) + Math.abs(p.vy) < .06) { chip(dc, p, .5); chips.splice(i, 1); }
+          if (++p.life > 45 || Math.abs(p.vx) + Math.abs(p.vy) < .06) { if (!onWord(p.x, p.y)) chip(dc, p, .72); chips.splice(i, 1); }   // only marks the uncut page
         }
       }
       // planned toolpath, drawn the way CAM software shows it: cuts as thin lines, rapids dashed
@@ -1831,13 +1839,12 @@ const INTROS = {
         else { status = "M30 PROGRAM END"; gline = "M09  G28 G91 Z0  M30"; }
         last = [x, y];
         stepChips();
-        if (t >= END) blast = Math.max(0, 1 - (t - END) / 450);       // air blast clears the swarf
         ox.clearRect(0, 0, W, H);
         ox.globalAlpha = blast; ox.drawImage(debris, 0, 0, W, H); ox.globalAlpha = 1;
         if (inPass) preview(moves, P.col, k);
         else if (t < R0) preview(rough, PASS.rough.col, 0);
         else if (t < F0) preview(finish, PASS.finish.col, 0);
-        chips.forEach(p => chip(ox, p, .9));
+        chips.forEach(p => { if (!onWord(p.x, p.y)) chip(ox, p, .9); });
         if (t < END + 500) spindle(x, y, (t < R0 + T_ROUGH + T_CHANGE * .5 ? PASS.rough : PASS.finish).r(), z, rpm);
         const zmm = z * 5 + (1 - z) * P.depth;
         put("x", mm(x)); put("y", mm(H - y)); put("z", (zmm >= 0 ? "+" : "") + zmm.toFixed(3));
@@ -2031,16 +2038,16 @@ const INTROS = {
 };
 
 let introLive = null;
+// the intro is the first screen of the page: the portfolio sits right below it, so visitors can scroll on while it runs
 function playIntro(key, onDone) {
   if (!INTROS[key]) { onDone && onDone(); return; }
-  if (introLive) introLive.finish(true);
-  const ov = document.createElement("div"); ov.id = "intro"; ov.className = "i-" + key;
-  ov.setAttribute("role", "presentation");
+  if (introLive) introLive.remove();
+  const ov = document.createElement("section"); ov.id = "intro"; ov.className = "i-" + key;
+  ov.setAttribute("aria-label", "Intro");
   ov.innerHTML = `<div class="stage"></div><button class="skip" type="button">Skip intro<i class="skip-bar"></i></button>`;
-  document.body.appendChild(ov);
-  document.documentElement.style.overflow = "hidden";
+  document.body.insertBefore(ov, root);
   const timers = [], intervals = [];
-  let alive = true, done = false;
+  let alive = true;
   const vis = S.projects.filter(p => !p.draft).map(p => p.title);
   const parts = S.site.name.trim().split(/\s+/);
   const now = new Date();
@@ -2052,26 +2059,18 @@ function playIntro(key, onDone) {
     later: (fn, ms) => timers.push(setTimeout(() => alive && fn(), ms)),
     track: (id, isInt) => (isInt ? intervals : timers).push(id)
   };
-  const { total, exit } = INTROS[key].run(ov.querySelector(".stage"), ctx);
+  const { total } = INTROS[key].run(ov.querySelector(".stage"), ctx);
   ov.querySelector(".skip-bar").style.animationDuration = total + "ms";
-  const finish = (fast) => {
-    if (done) return; done = true;
-    timers.forEach(clearTimeout); intervals.forEach(clearInterval);
-    document.documentElement.style.overflow = "";
-    removeEventListener("keydown", onKey); removeEventListener("wheel", onWheel); removeEventListener("touchmove", onWheel);
-    const cls = fast ? "out-fade" : exit === "self" ? null : "out-" + exit;
-    requestAnimationFrame(() => { render(); reveal(); progress(); });
-    if (!cls) { alive = false; ov.remove(); introLive = null; onDone && onDone(); return; }
-    ov.classList.add(cls);
-    setTimeout(() => { alive = false; ov.remove(); introLive = null; onDone && onDone(); }, 900);
-  };
-  const onKey = e => { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") finish(true); };
+  const toSite = () => scrollTo({ top: root.getBoundingClientRect().top + scrollY, behavior: REDUCED ? "auto" : "smooth" });
+  const inView = () => ov.getBoundingClientRect().bottom > innerHeight * .5;
+  const onKey = e => { if ((e.key === "Escape" || e.key === "Enter") && inView() && !e.target.closest("input,textarea,[contenteditable]")) toSite(); };
   addEventListener("keydown", onKey);
-  const onWheel = () => finish(true);
-  addEventListener("wheel", onWheel, { passive: true }); addEventListener("touchmove", onWheel, { passive: true });
-  ov.addEventListener("click", () => finish(true));
-  timers.push(setTimeout(() => finish(false), total));
-  introLive = { finish };
+  ov.addEventListener("click", toSite);
+  // when it finishes, carry on into the portfolio, unless the visitor has already scrolled away
+  timers.push(setTimeout(() => { ov.classList.add("ended"); if (scrollY < 30) toSite(); onDone && onDone(); }, total));
+  const remove = () => { alive = false; timers.forEach(clearTimeout); intervals.forEach(clearInterval); removeEventListener("keydown", onKey); ov.remove(); introLive = null; railCache.w = 0; progress(); };
+  introLive = { remove, el: ov };
+  railCache.w = 0; requestAnimationFrame(progress);
 }
 
 /* ---------- editing ---------- */
@@ -2225,7 +2224,7 @@ root.addEventListener("click", e => {
     case "intro-sheet": sheet = "intro"; rerender(); return;
     case "close": sheet = null; rerender(); return;
     case "copy-email": copyEmail(a); return;
-    case "replay": playIntro(S.site.intro); return;
+    case "replay": playIntro(S.site.intro); scrollTo({ top: 0 }); return;
     case "preview-intro": playIntro(a.dataset.k); return;
     case "use-intro": S.site.intro = a.dataset.k; break;
     case "add-contact": S.contacts.push({ label: "Website", value: "" }); break;
@@ -2257,13 +2256,18 @@ root.addEventListener("click", e => {
   rerender(); markDirty();
 });
 
-addEventListener("hashchange", () => { sheet = null; render(); scrollTo({ top: 0 }); reveal(); progress(); });
-addEventListener("keydown", e => { if (e.key === "Escape" && sheet && !introLive) { sheet = null; rerender(); } });
+addEventListener("hashchange", () => {
+  sheet = null;
+  const c = current(); if (introLive && (c.tab !== "work" || c.proj != null)) introLive.remove();
+  render(); scrollTo({ top: introLive ? root.offsetTop : 0 }); railCache.w = 0; reveal(); progress();
+});
+addEventListener("keydown", e => { if (e.key === "Escape" && sheet) { sheet = null; rerender(); } });
 let pyTick = false;
 addEventListener("scroll", () => {
   progress();   // the stage follows the scroll on the same event, with no frame of lag
-  if (REDUCED || pyTick || scrollY > innerHeight * 1.5) return;
-  pyTick = true; requestAnimationFrame(() => { const t = `translate3d(0,${(scrollY * -0.08).toFixed(1)}px,0)`; railCache.figs.forEach(f => f.style.transform = t); pyTick = false; });
+  const y = Math.max(0, scrollY - (railCache.top || 0));
+  if (REDUCED || pyTick || y > innerHeight * 1.5) return;
+  pyTick = true; requestAnimationFrame(() => { const t = `translate3d(0,${(Math.max(0, scrollY - (railCache.top || 0)) * -0.08).toFixed(1)}px,0)`; railCache.figs.forEach(f => f.style.transform = t); pyTick = false; });
 }, { passive: true });
 addEventListener("resize", () => { railCache.w = 0; progress(); });
 addEventListener("resize", () => { const c = current(); movePill(c.proj == null ? c.tab : "work"); });
@@ -2292,7 +2296,6 @@ else if (!REDUCED && !seen && S.site.intro !== "none" && (!location.hash || loca
     if (!canEdit) return;
     let back = null; try { back = sessionStorage.getItem("pf-after-save"); sessionStorage.removeItem("pf-after-save"); } catch {}
     if (back) { editing = true; if (location.hash !== back) location.hash = back.slice(1); toast("Published. Visitors now see this version."); }
-    if (introLive) return; // render happens when the intro ends
     rerender();
   } catch {}
 })();
