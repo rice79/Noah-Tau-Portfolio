@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><title>Noah Tau Portfolio</title><meta name="claude:viewport-fit-sides" content="cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap"><style id="site-css">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Noah Tau Portfolio</title><meta name="claude:viewport-fit-sides" content="cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap"><style id="site-css">
 /* Layout: light-brown sheet with a dark-brown top bar and footer band; projects as drawing-sheet cards; slate and navy carry highlights.
    Single deliberate light look: the page stays light brown in every OS theme. */
 :root{
@@ -330,9 +331,13 @@ img.fig{opacity:.2;object-fit:contain}
 /* ---------- intros ---------- */
 #intro{position:fixed;inset:0;z-index:50;overflow:hidden;cursor:pointer;display:grid;place-items:center;user-select:none;-webkit-user-select:none}
 #intro .stage{position:absolute;inset:0;display:grid;place-items:center}
-#intro .skip{position:absolute;right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,calc(env(safe-area-inset-bottom,0px) + 12px));z-index:3;font:500 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:inherit;background:transparent;border:1px solid currentColor;border-radius:999px;padding:9px 14px;cursor:pointer;opacity:.55;transition:opacity .2s}
+#intro .skip{position:absolute;right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,calc(env(safe-area-inset-bottom,0px) + 12px));z-index:3;font:500 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:inherit;background:transparent;border:1px solid currentColor;border-radius:999px;padding:9px 14px 11px;cursor:pointer;opacity:.6;transition:opacity .2s;overflow:hidden;animation:skipin .5s .5s backwards}
+#intro .skip:focus-visible{opacity:1;outline:2px solid currentColor;outline-offset:3px}
+@keyframes skipin{from{opacity:0;transform:translateY(6px)}}
+.skip-bar{position:absolute;left:14px;right:14px;bottom:5px;height:1px;background:currentColor;opacity:.55;transform-origin:left;animation:skipbar linear both}
+@keyframes skipbar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 #intro .skip:hover{opacity:1}
-.i-shop .skip,.i-titleblock .skip{right:auto!important;left:max(20px,env(safe-area-inset-left,0px))}
+#intro.i-shop .skip,#intro.i-titleblock .skip{right:auto;left:calc(max(18px,4vmin) + 18px);bottom:calc(max(18px,4vmin) + 18px + env(safe-area-inset-bottom,0px))}
 #intro.out-lift{transform:translateY(-100%);transition:transform .85s cubic-bezier(.7,0,.2,1)}
 #intro.out-fade{opacity:0;transition:opacity .5s ease}
 #intro.out-zoom{opacity:0;transform:scale(1.25);transition:opacity .6s ease,transform .7s cubic-bezier(.7,0,.2,1)}
@@ -388,10 +393,23 @@ img.fig{opacity:.2;object-fit:contain}
 .sp-cnc{position:relative;z-index:2;opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s var(--ease)}
 .sp-cnc.on{opacity:1;transform:none}
 .sp-cnc canvas{position:absolute;inset:0}
-.sp-read{bottom:calc(max(18px,4vmin) + 120px)}
-.sp-block{animation:fadein .3s 6.6s both}
+.sp-wrap{position:relative;z-index:2;display:grid;justify-items:center;gap:22px}
+.sp-block{animation:fadein .3s 7s both}
+/* machine controller readout */
+.dro{width:min(560px,80vw);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 22px;padding:13px 16px 11px;background:#1C2B3D;color:#E8DDCB;border-radius:7px;box-shadow:0 14px 34px -18px rgba(28,20,16,.6),inset 0 0 0 1px rgba(157,178,198,.14);font:500 11px/1.2 var(--mono);letter-spacing:.04em;opacity:0;transform:translateY(6px);transition:opacity .45s ease,transform .45s var(--ease)}
+.dro.on{opacity:1;transform:none}
+.dro b{font-weight:500;color:#9DB2C6;margin-right:9px}
+.dro-axes{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline}
+.dro-axes span{display:inline-block;min-width:6.2ch;text-align:right;font-size:clamp(15px,2.1vw,20px);color:#F3ECE1;font-variant-numeric:tabular-nums}
+.dro-side{display:grid;gap:4px;justify-items:end;color:#CDBFAE;font-variant-numeric:tabular-nums}
+.dro-side span{display:inline-block;min-width:9ch;text-align:right}
+.dro-foot{grid-column:1/-1;display:flex;justify-content:space-between;gap:14px;padding-top:9px;border-top:1px solid rgba(157,178,198,.2);color:#A89F96;white-space:nowrap;overflow:hidden}
+.dro-foot [data-g]{overflow:hidden;text-overflow:ellipsis}
+.dro-st{color:#9FBE95;flex:none}
+.dro-st::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:7px;vertical-align:1px;box-shadow:0 0 6px currentColor}
+.dro-st.warn{color:#E0B36A}
 .sp-block div{animation-duration:.3s}
-@media (max-width:760px){.sp-read{bottom:auto;top:61%;font-size:clamp(9.5px,2.7vw,12px);letter-spacing:.02em}}
+@media (max-width:560px){.dro{grid-template-columns:1fr;gap:8px}.dro-side{grid-auto-flow:column;justify-content:space-between;justify-items:start}.dro-side span{min-width:0}.dro-axes{gap:4px 16px}}
 
 /* 3 swatch shutter */
 .i-shutter{background:transparent;color:#E8DDCB}
@@ -1106,8 +1124,7 @@ function contactBand() {
   return `<div class="cband"><div class="wrap">
     <div><h2>${T("site.contactHeading", "Heading")} <em>${T("site.contactAccent", "accent")}</em></h2>${T("site.contactIntro", "A line about what you're open to", "p")}</div>
     <div class="cta">${contactButtons(true)}</div>
-    <div class="foot">${T("site.footerLeft", "Footer left", "span", "label")}
-      <span style="display:flex;gap:18px;align-items:center">${S.site.intro !== "none" && !REDUCED ? `<button class="linkish" data-act="replay">Replay intro</button>` : ""}${T("site.footerRight", "Footer right", "span", "label")}</span></div>
+    ${S.site.intro !== "none" && !REDUCED ? `<div class="foot"><span></span><button class="linkish" data-act="replay">Replay intro</button></div>` : ""}
   </div></div>`;
 }
 
@@ -1137,7 +1154,6 @@ function workView() {
       </div>
       ${benchList.length ? benchHtml(benchList) : ""}
     </div>
-    ${facts.length ? `<div class="ticker">${facts.map((f, k) => `<div>${T(`site.facts.${k}.k`, "Label", "span", "label")}<b>${T(`site.facts.${k}.v`, "Value")}</b></div>`).join("")}</div>` : ""}
     ${editing ? figTools("hero", 0) : ""}
     </section>
 
@@ -1238,8 +1254,7 @@ function projectView(i) {
       </div>
       <div class="meta">${metaRow("role", "Role", "Your role")}${metaRow("year", "Year", "Year")}${metaRow("status", "Status", "Status")}${metaRow("category", "Discipline", "Filter group")}</div>
     </div>
-    ${p.cover ? `<div class="pcover">${coverArt(p)}</div>` : p.spin ? `<div class="viewer" data-viewer>${spinBox(p, "big")}
-      <div class="vbar"><span class="label">CAD model</span><span class="vread" aria-hidden="true">θ 000°</span><span class="label">Drag to rotate</span></div></div>` : ""}
+    ${p.cover ? `<div class="pcover">${coverArt(p)}</div>` : p.spin ? `<div class="viewer" data-viewer>${spinBox(p, "big")}</div>` : ""}
     ${editing ? `<div class="tools">
         <button class="tool" data-act="pick" data-target="cover" data-i="${i}">${p.cover ? "Replace cover image" : "+ Cover image"}</button>
         ${p.cover ? `<button class="tool" data-act="clear-cover" data-i="${i}">Remove cover</button>` : ""}
@@ -1510,7 +1525,7 @@ function gearPath(n, r, m) {
   }
   return "M" + pts.join("L") + "Z";
 }
-const T_STOCK = 1500, T_ROUGH0 = 1800, T_ROUGH = 2100, T_CHANGE = 350, T_FINISH = 2100, T_END = T_ROUGH0 + T_ROUGH + T_CHANGE + T_FINISH + 250;
+const T_STOCK = 1500, T_ROUGH0 = 1900, T_ROUGH = 2100, T_CHANGE = 650, T_FINISH = 2100, T_END = T_ROUGH0 + T_ROUGH + T_CHANGE + T_FINISH + 250;
 const INTROS = {
   shop: { name: "Shop Floor", sw: ["#D6C3AA", "#2A201B", "#485A6A", "#4E3C33"], desc: "A blend of Drawing Sheet, Boot Sequence and CNC Toolpath. The sheet boots and logs your projects, then a cutter engraves your name into the light-brown page: a raster roughing pass, a tool change, and a finishing pass around every letter edge.",
     run(st, c) {
@@ -1519,8 +1534,12 @@ const INTROS = {
       const zones = ["A", "B", "C", "D"].map((z, k) => `<span class="tb-z" style="left:calc(max(18px,4vmin) - 12px);top:${16 + k * 22}%">${z}</span>`).join("") +
         [1, 2, 3, 4, 5, 6].map((z, k) => `<span class="tb-z" style="top:calc(max(18px,4vmin) - 14px);left:${10 + k * 15}%">${z}</span>`).join("");
       st.innerHTML = `<div class="tb-frame"></div>${zones}<div class="sp-fig">${(() => { const q = S.projects.find(x => x.id === String(S.site.heroFigure || "").slice(5)); return q && q.figure ? `<img src="${asUrl(q.figure)}" alt="">` : FIG("robot"); })()}</div><div class="sp-log" aria-hidden="true"></div>
-        <div class="sp-cnc"><canvas class="sp-cut"></canvas><canvas class="sp-ov"></canvas></div>
-        <div class="tp-read sp-read">G00 X000.00 Y000.00</div>
+        <div class="sp-wrap"><div class="sp-cnc"><canvas class="sp-base"></canvas><canvas class="sp-cut"></canvas><canvas class="sp-ov"></canvas></div>
+          <div class="dro" aria-hidden="true">
+            <div class="dro-axes"><div><b>X</b><span data-x>0.000</span></div><div><b>Y</b><span data-y>0.000</span></div><div><b>Z</b><span data-z>+5.000</span></div></div>
+            <div class="dro-side"><div><b>T</b><span data-t>1 Ø3.0 FLAT</span></div><div><b>S</b><span data-s>0</span></div><div><b>F</b><span data-f>0</span></div></div>
+            <div class="dro-foot"><span data-g>N0000 G90 G54 G17 G21</span><span class="dro-st" data-st>READY</span></div>
+          </div></div>
         <div class="tb-block sp-block">${cells.map(([k], n) => `<div style="animation-delay:${T_END / 1000 + .05 + n * .06}s"><small>${k}</small><span data-v="${n}"></span></div>`).join("")}</div>`;
 
       // ---- 1. boot log ----
@@ -1541,10 +1560,11 @@ const INTROS = {
       });
 
       // ---- 2. geometry from the letterforms ----
-      const box = st.querySelector(".sp-cnc"), view = st.querySelector(".sp-cut"), ov = st.querySelector(".sp-ov"), rd = st.querySelector(".sp-read");
+      const box = st.querySelector(".sp-cnc"), base = st.querySelector(".sp-base"), view = st.querySelector(".sp-cut"), ov = st.querySelector(".sp-ov"), dro = st.querySelector(".dro");
+      const D = k => dro.querySelector(`[data-${k}]`);
       const dpr = Math.min(2, devicePixelRatio || 1);
       const W = Math.round(Math.min(640, innerWidth * .8)), H = Math.round(W * .3);
-      [view, ov].forEach(cv => { cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + "px"; cv.style.height = H + "px"; cv.getContext("2d").scale(dpr, dpr); });
+      [base, view, ov].forEach(cv => { cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + "px"; cv.style.height = H + "px"; cv.getContext("2d").scale(dpr, dpr); });
       box.style.width = W + "px"; box.style.height = H + "px";
       const vx = view.getContext("2d"), ox = ov.getContext("2d");
       const raw = document.createElement("canvas"); raw.width = W * dpr; raw.height = H * dpr; const rx = raw.getContext("2d"); rx.scale(dpr, dpr);
@@ -1606,10 +1626,10 @@ const INTROS = {
         return runs;
       }
       const withLen = pts => { const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])); return { pts, cum, len: cum[cum.length - 1] || 0.001 }; };
-      const home = [W - 6, 6];
+      const home = [W - 22, 20];
       function program(paths) {
         const moves = []; let pos = home;
-        paths.forEach(pp => { const gap = Math.hypot(pp[0][0] - pos[0], pp[0][1] - pos[1]); moves.push({ kind: gap < 3 ? "link" : "rapid", ...withLen([pos, pp[0]]) }); moves.push({ kind: "cut", ...withLen(pp) }); pos = pp[pp.length - 1]; });
+        paths.forEach(pp => { const gap = Math.hypot(pp[0][0] - pos[0], pp[0][1] - pos[1]); moves.push({ kind: gap < 3 ? "link" : "rapid", ...withLen([pos, pp[0]]) }); moves.push({ kind: "cut", tag: pp.tag || "", ...withLen(pp) }); pos = pp[pp.length - 1]; });
         moves.push({ kind: "rapid", ...withLen([pos, home]) });
         return moves;
       }
@@ -1620,8 +1640,9 @@ const INTROS = {
         [...word].forEach((ch, i) => {
           if (!ch.trim()) { Fper.push([]); return; }
           const pocket = letterMask(i, rT + allow);
-          R.push(...raster(pocket, Math.max(2, Math.round(rT * 1.4))), ...contours(pocket));   // zigzag, then a wall pass
-          Fper.push([...contours(letterMask(i, rF)), ...contours(letterMask(i, rF * 2.6))]);      // edge pass + second ring
+          const tag = (a, t) => a.map(pp => (pp.tag = t, pp));
+          R.push(...tag(raster(pocket, Math.max(2, Math.round(rT * 1.4))), "RASTER"), ...tag(contours(pocket), "WALL"));   // zigzag, then a wall pass
+          Fper.push(tag([...contours(letterMask(i, rF)), ...contours(letterMask(i, rF * 2.6))], "CONTOUR"));      // edge pass + second ring
         });
         // rest machining: simulate every planned cut, find what is still uncut inside the letters, and add passes for it
         const sim = document.createElement("canvas"); sim.width = W; sim.height = H;
@@ -1643,7 +1664,7 @@ const INTROS = {
         const letterAt = x => { let k = 0; while (k + 1 < adv.length && x0 + adv[k + 1] <= x) k++; return k; };
         for (let y = half; y < H; y += step) {
           const yy = Math.round(y); let s0 = -1, gapN = 0;
-          const flush = (a, b) => { const mid = [a, yy], li = letterAt(a); Fper[li] = Fper[li] || []; Fper[li].push(b > a ? [[a, yy], [b, yy]] : [mid, [a + .5, yy]]); };
+          const flush = (a, b) => { const mid = [a, yy], li = letterAt(a); Fper[li] = Fper[li] || []; const pp = b > a ? [[a, yy], [b, yy]] : [mid, [a + .5, yy]]; pp.tag = "REST"; Fper[li].push(pp); };
           for (let x = 0; x < W; x++) {
             let hit = 0; for (let dy = -half; dy <= half && !hit; dy++) { const r2 = yy + dy; if (r2 >= 0 && r2 < H && miss[r2 * W + x]) hit = 1; }
             if (hit) { if (s0 < 0) s0 = x; gapN = 0; }
@@ -1654,78 +1675,179 @@ const INTROS = {
         rough = program(R); finish = program(Fper.flat());
       }
 
-      // ---- 3. drawing ----
-      const CUT = "#4E3C33";
+      // ---- 3. rendering: stock, pocket, swarf and the spindle ----
       const at2 = (mv, d) => { const { pts, cum } = mv; let i = 1; while (i < cum.length - 1 && cum[i] < d) i++; const s2 = (d - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1); return [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * s2, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * s2, i]; };
-      function cutSeg(mv, d0, d1, r) {
+      const mk = () => { const cv = document.createElement("canvas"); cv.width = W * dpr; cv.height = H * dpr; return cv; };
+      const Cv = mk(), Tv = mk(), debris = mk();
+      const cc = Cv.getContext("2d"), tc = Tv.getContext("2d"), dc = debris.getContext("2d"); dc.scale(dpr, dpr);
+      const FLOOR = { rough: ["#46352D", "#5A463B"], finish: ["#4C3A31", "#5B473B"] };   // [pocket floor, rim the cutter leaves]
+      // each stroke lays its rim first and its floor inside it, so neighbouring passes leave faint cusp lines
+      // and every frame's start leaves a small arc: the feed marks a real end mill leaves behind
+      function cutSeg(mv, d0, d1, r, pass) {
         const a = at2(mv, d0), b = at2(mv, d1);
-        rx.strokeStyle = CUT; rx.lineWidth = r * 2; rx.lineCap = rx.lineJoin = "round";
-        rx.beginPath(); rx.moveTo(a[0], a[1]); for (let i = a[2]; i < b[2]; i++) rx.lineTo(mv.pts[i][0], mv.pts[i][1]); rx.lineTo(b[0], b[1]); rx.stroke();
+        const path = () => { rx.beginPath(); rx.moveTo(a[0], a[1]); for (let i = a[2]; i < b[2]; i++) rx.lineTo(mv.pts[i][0], mv.pts[i][1]); rx.lineTo(b[0], b[1]); };
+        rx.lineCap = rx.lineJoin = "round";
+        path(); rx.strokeStyle = FLOOR[pass][1]; rx.lineWidth = r * 2; rx.stroke();
+        path(); rx.strokeStyle = FLOOR[pass][0]; rx.lineWidth = Math.max(.6, r * 2 - 1.1); rx.stroke();
       }
-      // what you see = cuts, clipped to the exact letter shapes, so edges stay crisp
+      // the pocket is lit from the top left: its top-left walls throw shadow onto the floor, its far walls catch light
       function present() {
-        vx.save(); vx.setTransform(1, 0, 0, 1, 0, 0); vx.clearRect(0, 0, view.width, view.height);
-        vx.drawImage(letterFill, 0, 0); vx.globalCompositeOperation = "source-in"; vx.drawImage(raw, 0, 0); vx.restore();
+        const w = Cv.width, h = Cv.height;
+        cc.globalCompositeOperation = "source-over"; cc.clearRect(0, 0, w, h);
+        cc.drawImage(letterFill, 0, 0); cc.globalCompositeOperation = "source-in"; cc.drawImage(raw, 0, 0);
+        vx.save(); vx.setTransform(1, 0, 0, 1, 0, 0); vx.clearRect(0, 0, w, h); vx.drawImage(Cv, 0, 0);
+        const rim = (dx, dy, col) => {
+          tc.globalCompositeOperation = "source-over"; tc.clearRect(0, 0, w, h); tc.drawImage(Cv, 0, 0);
+          tc.globalCompositeOperation = "source-in"; tc.fillStyle = col; tc.fillRect(0, 0, w, h);
+          tc.globalCompositeOperation = "destination-out"; tc.drawImage(Cv, dx * dpr, dy * dpr);
+          vx.drawImage(Tv, 0, 0);
+        };
+        rim(1.2, 1.6, "rgba(18,11,8,.45)"); rim(2.6, 3.4, "rgba(18,11,8,.2)");
+        rim(-1, -1.1, "rgba(240,231,217,.42)");
+        vx.restore();
       }
+      // setup marks on the stock: corner ticks for the job and the G54 work origin
+      function drawBase() {
+        const g = base.getContext("2d"); g.clearRect(0, 0, W, H);
+        g.strokeStyle = "rgba(72,90,106,.5)"; g.lineWidth = 1;
+        [[1, 1, 1, 1], [W - 1, 1, -1, 1], [1, H - 1, 1, -1], [W - 1, H - 1, -1, -1]].forEach(([x, y, sx, sy]) => { g.beginPath(); g.moveTo(x + sx * 12, y + .5 * sy); g.lineTo(x, y + .5 * sy); g.moveTo(x + .5 * sx, y); g.lineTo(x + .5 * sx, y + sy * 12); g.stroke(); });
+        const ox0 = 16, oy0 = H - 16;
+        if (oy0 - 30 < baseY && x0 < 46) return;   // no clear corner under or beside the lettering (phones): leave the origin marker off
+        g.strokeStyle = "rgba(28,43,61,.75)"; g.fillStyle = "rgba(28,43,61,.75)";
+        g.beginPath(); g.arc(ox0, oy0, 5, 0, 7); g.stroke();
+        g.beginPath(); g.moveTo(ox0, oy0); g.arc(ox0, oy0, 5, -Math.PI / 2, 0); g.closePath(); g.fill();
+        g.beginPath(); g.moveTo(ox0, oy0); g.arc(ox0, oy0, 5, Math.PI / 2, Math.PI); g.closePath(); g.fill();
+        g.lineWidth = .9; g.beginPath(); g.moveTo(ox0 + 8, oy0); g.lineTo(ox0 + 26, oy0); g.moveTo(ox0, oy0 - 8); g.lineTo(ox0, oy0 - 26); g.stroke();
+        g.beginPath(); g.moveTo(ox0 + 26, oy0); g.lineTo(ox0 + 21, oy0 - 2.5); g.lineTo(ox0 + 21, oy0 + 2.5); g.fill();
+        g.beginPath(); g.moveTo(ox0, oy0 - 26); g.lineTo(ox0 - 2.5, oy0 - 21); g.lineTo(ox0 + 2.5, oy0 - 21); g.fill();
+        g.font = '500 8px "DM Mono", ui-monospace, monospace'; g.fillText("X", ox0 + 28, oy0 + 3); g.fillText("Y", ox0 - 2.5, oy0 - 29); g.fillText("G54", ox0 + 8, oy0 + 11);
+      }
+      // swarf: chips fly off the side of the cutter, skid to a stop and stay on the stock until the air blast
+      const CHIP = ["#CBB497", "#DCCBB2", "#B99D7C", "#E6D9C6"], chips = [];
+      function emit(x, y, dx, dy, n) {
+        const base = Math.atan2(dy, dx);
+        for (let i = 0; i < n; i++) {
+          const ang = base + (Math.random() < .5 ? 1 : -1) * (Math.PI / 2 + (Math.random() - .3) * .9), v = 1 + Math.random() * 2.8;
+          chips.push({ x, y, vx: Math.cos(ang) * v, vy: Math.sin(ang) * v, rot: Math.random() * 6.3, vr: (Math.random() - .5) * .7, s: .7 + Math.random() * 1.5, c: CHIP[(Math.random() * 4) | 0], life: 0 });
+        }
+        if (chips.length > 160) chips.splice(0, chips.length - 160);
+      }
+      function chip(g, p, alpha) { g.save(); g.globalAlpha = alpha; g.translate(p.x, p.y); g.rotate(p.rot); g.strokeStyle = p.c; g.lineWidth = Math.max(.6, p.s * .55); g.lineCap = "round"; g.beginPath(); g.arc(0, 0, p.s, 0, 2.5); g.stroke(); g.restore(); }
+      function stepChips() {
+        for (let i = chips.length - 1; i >= 0; i--) {
+          const p = chips[i]; p.x += p.vx; p.y += p.vy; p.vx *= .84; p.vy *= .84; p.rot += p.vr; p.vr *= .9;
+          if (++p.life > 45 || Math.abs(p.vx) + Math.abs(p.vy) < .06) { chip(dc, p, .5); chips.splice(i, 1); }
+        }
+      }
+      // planned toolpath, drawn the way CAM software shows it: cuts as thin lines, rapids dashed
       function preview(moves, col, upto) {
-        ox.save(); ox.lineWidth = .8;
-        moves.forEach((mv, k) => {
-          if (mv.kind === "link") return;
+        ox.save(); ox.lineWidth = .7;
+        for (let k = Math.max(0, upto); k < moves.length; k++) {
+          const mv = moves[k]; if (mv.kind === "link") continue;
+          if (mv.kind === "cut" && mv.tag === "REST") continue;                       // clean-up passes are short dashes: leave them out of the preview
+          if (mv.kind === "rapid" && (mv.len < 18 || (moves[k + 1] && moves[k + 1].tag === "REST"))) continue;
           ox.beginPath(); mv.pts.forEach((p2, i) => i ? ox.lineTo(p2[0], p2[1]) : ox.moveTo(p2[0], p2[1]));
-          if (k < upto) return;
-          if (mv.kind === "rapid") { ox.setLineDash([2, 6]); ox.strokeStyle = "rgba(72,90,106,.18)"; }
-          else { if (mv.pts.length < 4) return; ox.setLineDash([4, 3]); ox.strokeStyle = col; }
+          if (mv.kind === "rapid") { ox.setLineDash([2, 5]); ox.strokeStyle = "rgba(28,43,61,.22)"; } else { ox.setLineDash([]); ox.strokeStyle = col; }
           ox.stroke();
-        });
+        }
         ox.restore();
       }
-      function tool(x, y, r, lifted) {
+      // the spindle seen from above: a translucent holder over the cutter, its shadow dropping away as it lifts
+      let ang = 0;
+      function spindle(x, y, r, z, rpm) {
+        const hr = Math.max(10, r * 2.8) * (1 + .12 * z), sx = 3 + z * 10, sy = 4 + z * 12;
         ox.save(); ox.setLineDash([]);
-        const rr = Math.max(3, r);
-        ox.strokeStyle = lifted ? "rgba(28,43,61,.45)" : "#1C2B3D"; ox.lineWidth = 1.2;
-        ox.beginPath(); ox.arc(x, y, rr + 3, 0, 7); ox.stroke();
-        ox.fillStyle = lifted ? "rgba(28,43,61,.45)" : "#1C2B3D"; ox.beginPath(); ox.arc(x, y, 1.6, 0, 7); ox.fill();
+        ox.fillStyle = `rgba(30,20,14,${.17 - z * .07})`; ox.beginPath(); ox.arc(x + sx, y + sy, hr + 2 + z * 4, 0, 7); ox.fill();
+        const g = ox.createRadialGradient(x - hr * .4, y - hr * .45, hr * .1, x, y, hr);
+        g.addColorStop(0, "rgba(240,244,247,.6)"); g.addColorStop(.55, "rgba(166,184,201,.46)"); g.addColorStop(1, "rgba(72,90,106,.6)");
+        ox.fillStyle = g; ox.beginPath(); ox.arc(x, y, hr, 0, 7); ox.fill();
+        ox.strokeStyle = "rgba(28,43,61,.75)"; ox.lineWidth = 1; ox.stroke();
+        ox.beginPath(); ox.arc(x, y, hr * .72, 0, 7); ox.strokeStyle = "rgba(28,43,61,.35)"; ox.lineWidth = .8; ox.stroke();
+        const fast = Math.min(1, rpm / 9000);
+        ang += .05 + fast * .9;
+        ox.strokeStyle = `rgba(28,43,61,${.55 * (1 - fast) + .08})`; ox.lineWidth = 1.6;          // collet-nut slots blur into a ring at speed
+        for (let k = 0; k < 4; k++) { const t = ang * .35 + k * Math.PI / 2; ox.beginPath(); ox.arc(x, y, hr * .86, t - .12, t + .12); ox.stroke(); }
+        if (fast > .2) { ox.beginPath(); ox.arc(x, y, hr * .86, 0, 7); ox.strokeStyle = `rgba(28,43,61,${.18 * fast})`; ox.lineWidth = 2.2; ox.stroke(); }
+        const cr = Math.max(2.4, r);
+        ox.fillStyle = "#1C2B3D"; ox.beginPath(); ox.arc(x, y, cr, 0, 7); ox.fill();
+        ox.strokeStyle = `rgba(232,221,203,${.75 - fast * .45})`; ox.lineWidth = .8;              // two flutes
+        for (let k = 0; k < 2; k++) { const t = ang + k * Math.PI; ox.beginPath(); ox.arc(x + Math.cos(t) * cr * .35, y + Math.sin(t) * cr * .35, cr * .55, t, t + 2.1); ox.stroke(); }
+        if (fast > .2) { ox.beginPath(); ox.arc(x, y, cr * .62, 0, 7); ox.strokeStyle = `rgba(232,221,203,${.22 * fast})`; ox.stroke(); }
         ox.restore();
       }
-      const fmt = v => (v * mmPerPx).toFixed(2).padStart(6, "0");
 
-      // ---- 4. timeline ----
-      const PASS = { rough: { moves: () => rough, r: () => rT, col: "rgba(72,90,106,.45)", dur: T_ROUGH, tag: "T1 Ø3.0 ROUGH", f: 3000 },
-                     finish: { moves: () => finish, r: () => rF, col: "rgba(28,43,61,.55)", dur: T_FINISH, tag: "T2 Ø1.0 FINISH", f: 1200 } };
+      // ---- 4. the machine: one clock drives the program, the spindle and the readout ----
+      const PASS = { rough: { moves: () => rough, r: () => rT, col: "rgba(72,90,106,.32)", start: T_ROUGH0, dur: T_ROUGH, tool: "1 Ø3.0 FLAT", rpm: 18000, f: 2400, depth: -0.8 },
+                     finish: { moves: () => finish, r: () => rF, col: "rgba(28,43,61,.42)", start: T_ROUGH0 + T_ROUGH + T_CHANGE, dur: T_FINISH, tool: "2 Ø1.0 FLAT", rpm: 24000, f: 900, depth: -1.0 } };
+      const STATE = { RASTER: "ROUGH · RASTER", WALL: "ROUGH · WALL", CONTOUR: "FINISH · CONTOUR", REST: "FINISH · REST" };
       const timing = (moves, dur) => { const eff = moves.map(m => m.kind === "cut" ? m.len : m.len / 6); const tot = eff.reduce((a, b) => a + b, 0) || 1; let acc = 0; return moves.map((m, k) => { const s2 = acc; acc += eff[k] / tot * dur; return [s2, acc]; }); };
       const fontReady = document.fonts ? Promise.race([document.fonts.load('600 80px "Source Serif 4"'), new Promise(r => setTimeout(r, 1200))]).catch(() => {}) : Promise.resolve();
       fontReady.then(() => { if (c.alive() && !rough) build(); });
-      c.later(() => { if (!rough) build(); box.classList.add("on"); ox.clearRect(0, 0, W, H); preview(rough, PASS.rough.col, 0); tool(home[0], home[1], rT, true); }, T_STOCK);
-
-      let phase = null, tbl = null, done = {}, t0 = 0;
-      function startPass(name, when) {
-        c.later(() => { if (!rough) build(); phase = name; t0 = performance.now(); tbl = timing(PASS[name].moves(), PASS[name].dur); done = {}; requestAnimationFrame(frame); }, when);
+      const mm = v => (v * mmPerPx).toFixed(3);
+      const shown = {}; const put = (k, v) => { if (shown[k] !== v) { shown[k] = v; D(k).textContent = v; } };
+      const T0 = performance.now();
+      const tbl = {}, done = { rough: {}, finish: {} }, closed = {};
+      let rpm = 0, last = null, blast = 1;
+      function apply(name, lt) {          // cut everything the program has reached by local time lt
+        const P = PASS[name], moves = P.moves(), T = tbl[name], r = P.r(); let changed = false;
+        for (let i = 0; i < moves.length; i++) {
+          const mv = moves[i]; if (mv.kind !== "cut") continue;
+          const [a, b] = T[i]; if (lt < a) break;
+          const d1 = Math.min(1, (lt - a) / (b - a)) * mv.len, d0 = done[name][i] || 0;
+          if (d1 > d0) { cutSeg(mv, d0, d1, r, name); done[name][i] = d1; changed = true; }
+        }
+        return changed;
       }
-      function frame(now) {
-        if (!c.alive() || !phase) return;
-        const P = PASS[phase], moves = P.moves(), r = P.r(), t = now - t0;
-        let k = tbl.findIndex(([, b]) => t < b); if (k < 0) k = moves.length - 1;
-        moves.forEach((mv, i) => {
-          if (mv.kind !== "cut") return;
-          const [a, b] = tbl[i]; if (t < a) return;
-          const d1 = Math.min(1, (t - a) / (b - a)) * mv.len, d0 = done[i] || 0;
-          if (d1 > d0) { cutSeg(mv, d0, d1, r); done[i] = d1; }
-        });
-        present();
-        ox.clearRect(0, 0, W, H); preview(moves, P.col, k);
-        const mv = moves[k], [a, b] = tbl[k], [x, y] = at2(mv, Math.max(0, Math.min(1, (t - a) / (b - a))) * mv.len);
-        const live = t < P.dur;
-        if (live) tool(x, y, r, mv.kind === "rapid");
-        rd.textContent = !live ? (phase === "rough" ? "M05 · M06 T2  (TOOL CHANGE)" : "M30  PROGRAM END")
-          : `${P.tag}   ${mv.kind === "rapid" ? "G00" : "G01"} X${fmt(x)} Y${fmt(H - y)}${mv.kind === "rapid" ? "" : " F" + P.f}`;
-        if (live) requestAnimationFrame(frame);
-        else if (phase === "rough") { phase = null; ox.clearRect(0, 0, W, H); preview(finish, PASS.finish.col, 0); tool(home[0], home[1], rF, true); }
-        else { phase = null; ox.clearRect(0, 0, W, H); sweep(); }
+      function loop(now) {
+        if (!c.alive()) return;
+        const t = now - T0;
+        if (t < T_STOCK) { requestAnimationFrame(loop); return; }
+        if (!rough) build();
+        if (!tbl.rough) { tbl.rough = timing(rough, T_ROUGH); tbl.finish = timing(finish, T_FINISH); drawBase(); box.classList.add("on"); dro.classList.add("on"); }
+        const R0 = PASS.rough.start, F0 = PASS.finish.start, END = F0 + T_FINISH;
+        let name = t < R0 + T_ROUGH ? "rough" : "finish";
+        const P = PASS[name], moves = P.moves(), lt = t - P.start;
+        let changed = false;
+        ["rough", "finish"].forEach(n => { const q = PASS[n]; if (!closed[n] && t >= q.start) { const l = Math.min(t - q.start, q.dur); if (apply(n, l)) changed = true; if (l >= q.dur) closed[n] = true; } });
+        if (changed) present();
+        // where the tool is, how high, and what the controller says
+        let x = home[0], y = home[1], z = 1, kind = "rapid", tag = "", k = -1, status = "", gline = "";
+        const inPass = lt >= 0 && lt < P.dur;
+        const rpmT = t < R0 ? (t > T_STOCK + 120 ? PASS.rough.rpm : 0) : inPass ? P.rpm : (t >= END ? 0 : (t < R0 + T_ROUGH + T_CHANGE * .5 ? 0 : PASS.finish.rpm));
+        rpm += (rpmT - rpm) * .09; if (Math.abs(rpmT - rpm) < 40) rpm = rpmT;
+        if (inPass) {
+          const T = tbl[name]; k = T.findIndex(([, b]) => lt < b); if (k < 0) k = moves.length - 1;
+          const mv = moves[k], [a, b] = T[k], f = Math.max(0, Math.min(1, (lt - a) / (b - a)));
+          [x, y] = at2(mv, f * mv.len); kind = mv.kind; tag = mv.tag || "";
+          if (kind === "cut") { const plunge = moves[k - 1] && moves[k - 1].kind === "rapid"; const pe = Math.min(70, (b - a) * .3); z = plunge ? Math.max(0, 1 - (lt - a) / pe) : 0; }
+          else if (kind === "link") z = 0;
+          else z = Math.min(1, (lt - a) / 50);
+          if (kind === "cut" && last && z < .3) { const dx = x - last[0], dy = y - last[1], dist = Math.hypot(dx, dy); if (dist > .4) emit(x, y, dx, dy, Math.min(4, Math.ceil(dist / 2.5))); }
+          const tgt = mv.pts[mv.pts.length - 1];
+          gline = `N${String((k + 1) * 10).padStart(4, "0")} ${kind === "rapid" ? "G00" : "G01"} X${mm(tgt[0])} Y${mm(H - tgt[1])}${kind === "rapid" ? " Z5.000" : " F" + P.f}`;
+          status = kind === "rapid" ? "RAPID" : (STATE[tag] || "CUT");
+        } else if (t < R0) { status = rpm > 100 ? "M03 SPINDLE ON" : "CYCLE START"; gline = `N0000 G90 G54 G17 G21  M03 S${PASS.rough.rpm}`; }
+        else if (t < F0) { const first = t < R0 + T_ROUGH + T_CHANGE * .5; status = first ? "M05 · M06 TOOL CHANGE" : "M03 SPINDLE ON"; gline = first ? "M05  M06 T2" : `G43 H2  M03 S${PASS.finish.rpm}`; name = first ? "rough" : "finish"; }
+        else { status = "M30 PROGRAM END"; gline = "M09  G28 G91 Z0  M30"; }
+        last = [x, y];
+        stepChips();
+        if (t >= END) blast = Math.max(0, 1 - (t - END) / 450);       // air blast clears the swarf
+        ox.clearRect(0, 0, W, H);
+        ox.globalAlpha = blast; ox.drawImage(debris, 0, 0, W, H); ox.globalAlpha = 1;
+        if (inPass) preview(moves, P.col, k);
+        else if (t < R0) preview(rough, PASS.rough.col, 0);
+        else if (t < F0) preview(finish, PASS.finish.col, 0);
+        chips.forEach(p => chip(ox, p, .9));
+        if (t < END + 500) spindle(x, y, (t < R0 + T_ROUGH + T_CHANGE * .5 ? PASS.rough : PASS.finish).r(), z, rpm);
+        const zmm = z * 5 + (1 - z) * P.depth;
+        put("x", mm(x)); put("y", mm(H - y)); put("z", (zmm >= 0 ? "+" : "") + zmm.toFixed(3));
+        put("t", (t < R0 + T_ROUGH + T_CHANGE * .5 ? PASS.rough : PASS.finish).tool); put("s", String(Math.round(rpm / 10) * 10));
+        put("f", inPass && kind !== "rapid" ? String(P.f) : "0"); put("g", gline); put("st", status);
+        D("st").classList.toggle("warn", status.startsWith("M05"));
+        if (t >= END + 250) dro.classList.remove("on");
+        if (t < END + 700) requestAnimationFrame(loop);
       }
-      // final clean-up: a last spring pass so no sliver of any letter is left uncut
-      function sweep() { present(); }
-      startPass("rough", T_ROUGH0);
-      startPass("finish", T_ROUGH0 + T_ROUGH + T_CHANGE);
+      requestAnimationFrame(loop);
 
       // ---- 5. title block signs off ----
       cells.forEach(([, v], n) => {
@@ -1914,7 +2036,7 @@ function playIntro(key, onDone) {
   if (introLive) introLive.finish(true);
   const ov = document.createElement("div"); ov.id = "intro"; ov.className = "i-" + key;
   ov.setAttribute("role", "presentation");
-  ov.innerHTML = `<div class="stage"></div>`;
+  ov.innerHTML = `<div class="stage"></div><button class="skip" type="button">Skip intro<i class="skip-bar"></i></button>`;
   document.body.appendChild(ov);
   document.documentElement.style.overflow = "hidden";
   const timers = [], intervals = [];
@@ -1931,11 +2053,12 @@ function playIntro(key, onDone) {
     track: (id, isInt) => (isInt ? intervals : timers).push(id)
   };
   const { total, exit } = INTROS[key].run(ov.querySelector(".stage"), ctx);
+  ov.querySelector(".skip-bar").style.animationDuration = total + "ms";
   const finish = (fast) => {
     if (done) return; done = true;
     timers.forEach(clearTimeout); intervals.forEach(clearInterval);
     document.documentElement.style.overflow = "";
-    removeEventListener("keydown", onKey);
+    removeEventListener("keydown", onKey); removeEventListener("wheel", onWheel); removeEventListener("touchmove", onWheel);
     const cls = fast ? "out-fade" : exit === "self" ? null : "out-" + exit;
     requestAnimationFrame(() => { render(); reveal(); progress(); });
     if (!cls) { alive = false; ov.remove(); introLive = null; onDone && onDone(); return; }
@@ -1944,6 +2067,8 @@ function playIntro(key, onDone) {
   };
   const onKey = e => { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") finish(true); };
   addEventListener("keydown", onKey);
+  const onWheel = () => finish(true);
+  addEventListener("wheel", onWheel, { passive: true }); addEventListener("touchmove", onWheel, { passive: true });
   ov.addEventListener("click", () => finish(true));
   timers.push(setTimeout(() => finish(false), total));
   introLive = { finish };
@@ -2172,4 +2297,5 @@ else if (!REDUCED && !seen && S.site.intro !== "none" && (!location.hash || loca
   } catch {}
 })();
 })();
-</script></body></html>
+</script>
+</body></html>
