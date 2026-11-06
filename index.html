@@ -1725,7 +1725,7 @@ const INTROS = {
         g.font = '500 8px "DM Mono", ui-monospace, monospace'; g.fillText("X", ox0 + 28, oy0 + 3); g.fillText("Y", ox0 - 2.5, oy0 - 29); g.fillText("G54", ox0 + 8, oy0 + 11);
       }
       // swarf: chips fly off the side of the cutter, skid to a stop and stay on the stock until the air blast
-      const CHIP = ["#5A463D", "#4E3C33", "#6B5546", "#3E302A"], chips = [];
+      const CHIP = ["#5A463D", "#4E3C33", "#6B5546", "#3E302A"], chips = [], settled = [];
       const onWord = (x, y) => { if (!wordMask) return false; const i = (y | 0) * W + (x | 0); return x >= 0 && y >= 0 && x < W && y < H && wordMask[i] === 1; };
       function emit(x, y, dx, dy, n) {
         const base = Math.atan2(dy, dx);
@@ -1744,7 +1744,7 @@ const INTROS = {
       function stepChips() {
         for (let i = chips.length - 1; i >= 0; i--) {
           const p = chips[i]; p.x += p.vx; p.y += p.vy; p.vx *= .84; p.vy *= .84; p.rot += p.vr; p.vr *= .9;
-          if (++p.life > 45 || Math.abs(p.vx) + Math.abs(p.vy) < .06) { if (!onWord(p.x, p.y)) chip(dc, p, .72); chips.splice(i, 1); }   // only marks the uncut page
+          if (++p.life > 45 || Math.abs(p.vx) + Math.abs(p.vy) < .06) { if (!onWord(p.x, p.y)) { chip(dc, p, .72); settled.push(p); } chips.splice(i, 1); }   // only marks the uncut page
         }
       }
       // planned toolpath, drawn the way CAM software shows it: cuts as thin lines, rapids dashed
@@ -1781,6 +1781,26 @@ const INTROS = {
         ox.strokeStyle = `rgba(232,221,203,${.75 - fast * .45})`; ox.lineWidth = .8;              // two flutes
         for (let k = 0; k < 2; k++) { const t = ang + k * Math.PI; ox.beginPath(); ox.arc(x + Math.cos(t) * cr * .35, y + Math.sin(t) * cr * .35, cr * .55, t, t + 2.1); ox.stroke(); }
         if (fast > .2) { ox.beginPath(); ox.arc(x, y, cr * .62, 0, 7); ox.strokeStyle = `rgba(232,221,203,${.22 * fast})`; ox.stroke(); }
+        ox.restore();
+      }
+
+      // a bench brush, seen from above, sweeping left to right across the whole stock
+      function brush(bx, speed) {
+        const w = 20, top = -10, h = H + 20, lean = Math.min(6, speed * 1.6);
+        ox.save(); ox.setLineDash([]);
+        ox.fillStyle = "rgba(30,20,14,.16)"; ox.beginPath(); ox.roundRect(bx - w / 2 + 5, top + 7, w + 8, h, 5); ox.fill();      // its shadow
+        ox.lineWidth = 1; ox.lineCap = "round";                                                                                  // bristles trail as it moves
+        for (let y = top + 2; y < top + h - 2; y += 1.3) {
+          const len = 10 + ((y * 7.31) % 4), x0 = bx + w / 2 - 1;
+          ox.strokeStyle = (y * 3.7) % 2 < 1 ? "#3E302A" : "#5A463D";
+          ox.beginPath(); ox.moveTo(x0, y); ox.quadraticCurveTo(x0 + len * .6, y, x0 + len - lean * .4, y + lean * .15); ox.stroke();
+        }
+        const g = ox.createLinearGradient(bx - w / 2, 0, bx + w / 2, 0);
+        g.addColorStop(0, "#7A5C45"); g.addColorStop(.45, "#A88466"); g.addColorStop(1, "#8A6B52");
+        ox.fillStyle = g; ox.beginPath(); ox.roundRect(bx - w / 2, top, w, h, 5); ox.fill();
+        ox.strokeStyle = "rgba(46,35,30,.55)"; ox.stroke();
+        ox.strokeStyle = "rgba(62,48,42,.28)"; ox.lineWidth = .7;                                                               // wood grain
+        [-.22, .1, .3].forEach(f => { ox.beginPath(); ox.moveTo(bx + w * f, top + 6); ox.bezierCurveTo(bx + w * f + 1.5, top + h * .35, bx + w * f - 1.5, top + h * .65, bx + w * f, top + h - 6); ox.stroke(); });
         ox.restore();
       }
 
@@ -1840,7 +1860,18 @@ const INTROS = {
         last = [x, y];
         stepChips();
         ox.clearRect(0, 0, W, H);
-        ox.globalAlpha = blast; ox.drawImage(debris, 0, 0, W, H); ox.globalAlpha = 1;
+        const B0 = END + 250, BD = 1150;
+        if (t < B0) { ox.globalAlpha = blast; ox.drawImage(debris, 0, 0, W, H); ox.globalAlpha = 1; }
+        else {
+          const q = Math.min(1, (t - B0) / BD), e = q < .5 ? 2 * q * q : 1 - Math.pow(-2 * q + 2, 2) / 2;
+          const bx = -30 + (W + 80) * e, edge = bx + 12;
+          for (const p of settled) {
+            if (!p.sw && p.x < edge + 2) { p.sw = true; p.off = Math.random() * 9; p.dy = (Math.random() - .5) * .6; }
+            if (p.sw) { const to = edge + p.off; if (p.x < to) { p.x += (to - p.x) * .55; p.y += p.dy; p.rot += .25; } }
+            const a = .72 * Math.max(0, Math.min(1, (W + 6 - p.x) / 18));
+            if (a > .01) chip(ox, p, a);
+          }
+        }
         if (inPass) preview(moves, P.col, k);
         else if (t < R0) preview(rough, PASS.rough.col, 0);
         else if (t < F0) preview(finish, PASS.finish.col, 0);
@@ -1852,7 +1883,8 @@ const INTROS = {
         put("f", inPass && kind !== "rapid" ? String(P.f) : "0"); put("g", gline); put("st", status);
         D("st").classList.toggle("warn", status.startsWith("M05"));
         if (t >= END + 250) dro.classList.remove("on");
-        if (t < END + 700) requestAnimationFrame(loop);
+        if (t >= END + 250) { const q = Math.min(1, (t - END - 250) / 1150), sp = 4 * q * (1 - q); if (q < 1) brush(-30 + (W + 80) * (q < .5 ? 2 * q * q : 1 - Math.pow(-2 * q + 2, 2) / 2), sp * 3); }
+        if (t < END + 1500) requestAnimationFrame(loop);
       }
       requestAnimationFrame(loop);
 
@@ -1861,7 +1893,7 @@ const INTROS = {
         const el = st.querySelector(`[data-v="${n}"]`); let j = 0;
         c.later(() => { const iv = setInterval(() => { el.textContent = v.slice(0, ++j); if (j >= v.length) clearInterval(iv); }, 22); c.track(iv, true); }, T_END + 80 + n * 80);
       });
-      return { total: T_END + 1200, exit: "zoom" };
+      return { total: T_END + 2000, exit: "zoom" };
     } },
   blueprint: { name: "Blueprint", sw: ["#1C2B3D", "#485A6A"], desc: "A drafting grid appears, your name is drawn in line and dimensioned like a part.",
     run(st, c) {
