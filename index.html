@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><title>Noah Tau Portfolio</title><meta name="claude:viewport-fit-sides" content="cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap"><style id="site-css">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Noah Tau Portfolio</title><meta name="claude:viewport-fit-sides" content="cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap"><style id="site-css">
 /* Layout: light-brown sheet with a dark-brown top bar and footer band; projects as drawing-sheet cards; slate and navy carry highlights.
    Single deliberate light look: the page stays light brown in every OS theme. */
 :root{
@@ -204,7 +205,17 @@ a.crow:hover{transform:translateX(3px);background:var(--surface-2)}
 .reg.bl{left:8px;bottom:8px;border-left-width:1.2px;border-bottom-width:1.2px}.reg.br{right:8px;bottom:8px;border-right-width:1.2px;border-bottom-width:1.2px}
 .bench-head{display:flex;justify-content:space-between;padding:0 6px}
 .bench-of{font-variant-numeric:tabular-nums}
-.bench-stage{position:relative;display:block;aspect-ratio:16/9;margin:4px -8px 0;overflow:hidden;contain:paint}
+.bench-view{position:relative;margin:4px -8px 0}
+.bench-stage{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;contain:paint;touch-action:pan-y;-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
+.bench-arrow{position:absolute;top:50%;z-index:5;width:34px;height:34px;margin-top:-17px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(72,90,106,.45);background:rgba(232,221,203,.86);color:#1C2B3D;font:400 22px/1 var(--display);padding:0 0 3px;cursor:pointer;opacity:0;transition:opacity .25s,background .2s,border-color .2s}
+.bench-arrow.prev{left:10px}.bench-arrow.next{right:10px}
+.bench:hover .bench-arrow,.bench-arrow:focus-visible{opacity:1}
+.bench-arrow:hover{background:#E8DDCB;border-color:#485A6A}
+@media (hover:none),(pointer:coarse){.bench-arrow{opacity:.92;width:38px;height:38px;margin-top:-19px}}
+.bench.rev .bench-stage .bl.in{clip-path:inset(0 0 0 100%);animation-name:wiperev}
+@keyframes wiperev{from{clip-path:inset(0 0 0 100%)}to{clip-path:inset(0 0 0 0)}}
+.bench.rev.swap .scan{animation-name:scanrev}
+@keyframes scanrev{0%{left:100%;opacity:1}90%{opacity:1}100%{left:0;opacity:0}}
 .bench-stage .bl{position:absolute;inset:0;background-size:400% 400%}
 .bench-stage .bl{visibility:hidden}
 .bench-stage .bl.front{visibility:visible;z-index:0}
@@ -227,7 +238,10 @@ a.crow:hover{transform:translateX(3px);background:var(--surface-2)}
 .bench.swap .bf-t{animation:tswap .8s var(--ease)}
 @keyframes tswap{0%{opacity:1;transform:none}45%{opacity:0;transform:translateY(-6px)}50%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:none}}
 .bench-dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:50%}
-.bench-dots button{width:8px;height:8px;border-radius:50%;border:1px solid #485A6A;background:transparent;padding:0;cursor:pointer;transition:background .3s,transform .3s}
+.bench-dots button{position:relative;width:8px;height:8px;border-radius:50%;border:1px solid #485A6A;background:transparent;padding:0;cursor:pointer;transition:background .3s,transform .3s}
+.bench-dots button::after{content:"";position:absolute;inset:-7px}
+@media (pointer:coarse){.bench-dots{gap:12px}.bench-dots button{width:10px;height:10px}}
+@media (max-width:560px){.bench-foot{flex-direction:column;align-items:flex-start;gap:12px}.bench-dots{max-width:none;flex-wrap:nowrap;justify-content:flex-start}}
 .bench-dots button[aria-current]{background:#485A6A;transform:scale(1.15)}
 .bench-dots button:hover{background:color-mix(in srgb,#485A6A 40%,transparent)}
 /* last card of an odd row runs the full width, cover beside the text */
@@ -1264,10 +1278,13 @@ function benchHtml(list) {
   return `<div class="bench" data-bench aria-label="CAD models">
     <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
     <div class="bench-head"><span class="label" data-b-fig>FIG. 01</span><span class="label bench-of" data-b-of>01 / ${String(list.length).padStart(2, "0")}</span></div>
-    <a class="bench-stage" href="#p-${esc(p.id)}" data-b-link aria-label="Open ${esc(p.title)}">
-      <div class="bl spin front"></div><div class="bl spin"></div>
-      <i class="cross" aria-hidden="true"></i><i class="scan" aria-hidden="true"></i>
-    </a>
+    <div class="bench-view">
+      <a class="bench-stage" href="#p-${esc(p.id)}" data-b-link aria-label="Open ${esc(p.title)}">
+        <div class="bl spin front"></div><div class="bl spin"></div>
+        <i class="cross" aria-hidden="true"></i><i class="scan" aria-hidden="true"></i>
+      </a>
+      ${list.length > 1 ? `<button type="button" class="bench-arrow prev" data-b-step="-1" aria-label="Previous model">‹</button><button type="button" class="bench-arrow next" data-b-step="1" aria-label="Next model">›</button>` : ""}
+    </div>
     <div class="bench-dim" aria-hidden="true"><i class="dl"></i><span data-b-dim>${esc(p.dims || "")}</span></div>
     <div class="bench-foot">
       <div class="bf-t"><span class="label" data-b-org>${esc(p.org)}</span><h3 data-b-title>${esc(p.title)}</h3></div>
@@ -1519,8 +1536,9 @@ function setupBench() {
     b.querySelectorAll("[data-b-go]").forEach((d, k) => k === j ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current"));
   };
   layers.forEach(el => el.classList.remove("next", "in", "front")); layers[0].classList.add("front"); paint(layers[0], list[0]); label(0);
-  function show(j) {
+  function show(j, reverse) {
     if (j === idx) return;
+    b.classList.toggle("rev", !!reverse);
     if (busy) { clearTimeout(busy.t1); clearTimeout(busy.t2); busy.done(); }       // a click mid-wipe finishes the old wipe at once
     const back = layers[1 - front], cur = layers[front];
     paint(back, list[j]); idx = j;
@@ -1531,13 +1549,30 @@ function setupBench() {
     if (REDUCED) { clearTimeout(busy.t1); clearTimeout(busy.t2); label(j); done(); }
   }
   b.addEventListener("pointerenter", () => hold = true); b.addEventListener("pointerleave", () => hold = false);
-  b.addEventListener("click", e => { const d = e.target.closest("[data-b-go]"); if (d) { e.preventDefault(); show(+d.dataset.bGo); } });
+  let pausedUntil = 0;
+  const go = (j, back) => { pausedUntil = performance.now() + 9000; show(((j % list.length) + list.length) % list.length, back); };
+  b.addEventListener("click", e => {
+    const d = e.target.closest("[data-b-go]"); if (d) { e.preventDefault(); go(+d.dataset.bGo, +d.dataset.bGo < idx); return; }
+    const a = e.target.closest("[data-b-step]"); if (a) { e.preventDefault(); go(idx + +a.dataset.bStep, +a.dataset.bStep < 0); }
+  });
+  // swipe left or right on the model to move through them; a tap still opens the project
+  const stage = b.querySelector(".bench-stage"); let sx = null, sy = 0, swiped = false;
+  stage.addEventListener("pointerdown", e => { if (e.pointerType === "mouse") return; sx = e.clientX; sy = e.clientY; swiped = false; });
+  stage.addEventListener("pointermove", e => {
+    if (sx == null) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    if (Math.abs(dx) > 32 && Math.abs(dx) > Math.abs(dy) * 1.2) { swiped = true; sx = null; go(idx + (dx < 0 ? 1 : -1), dx > 0); }
+    else if (Math.abs(dy) > 24) sx = null;            // a vertical drag is a page scroll: let it be
+  });
+  ["pointerup", "pointercancel"].forEach(t => stage.addEventListener(t, () => { sx = null; }));
+  stage.addEventListener("click", e => { if (swiped) { e.preventDefault(); e.stopPropagation(); swiped = false; } }, true);
+  stage.addEventListener("dragstart", e => e.preventDefault());
   b._show = show;
   if (REDUCED) return;
   let onScreen = true;
   if ("IntersectionObserver" in window) new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }).observe(b);
   benchSpin = stepper(110, () => { if (!document.contains(b)) { benchSpin && benchSpin(); return; } if (!onScreen || document.hidden) return; f++; put(layers[front], f); if (busy) put(layers[1 - front], f); });
-  benchTimer = setInterval(() => { if (!document.contains(b)) { clearInterval(benchTimer); return; } if (!hold && !document.hidden && !busy && onScreen) show((idx + 1) % list.length); }, 4600);
+  benchTimer = setInterval(() => { if (!document.contains(b)) { clearInterval(benchTimer); return; } if (!hold && !document.hidden && !busy && onScreen && performance.now() > pausedUntil) show((idx + 1) % list.length); }, 4600);
 }
 // project page: drag to rotate, slow auto-turn until the visitor takes over
 let viewTimer = null;
@@ -2403,4 +2438,5 @@ else if (!REDUCED && !seen && S.site.intro !== "none" && (!location.hash || loca
   } catch {}
 })();
 })();
-</script></body></html>
+</script>
+</body></html>
