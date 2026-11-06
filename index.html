@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><title>Noah Tau Portfolio</title><meta name="claude:viewport-fit-sides" content="cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap"><style id="site-css">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Noah Tau Portfolio</title><meta name="claude:viewport-fit-sides" content="cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap"><style id="site-css">
 /* Layout: light-brown sheet with a dark-brown top bar and footer band; projects as drawing-sheet cards; slate and navy carry highlights.
    Single deliberate light look: the page stays light brown in every OS theme. */
 :root{
@@ -574,7 +575,7 @@ img.fig{opacity:.2;object-fit:contain}
     "Mechanical design",
     "CAD"
    ],
-   "summary": "Plays the 2026 FRC game \"Rebuilt\". A dumper robot that holds over 80 6 inch diamter balls and shoots balls at 10 balls per second. Uses a swerve drive and 4 Limelight 4's to navigate and understand its position on the field. ",
+   "summary": "Plays the 2026 FRC game \"Rebuilt\". A dumper robot that holds over 80 6 inch diamter balls and shoots balls at 10 balls per second into a central hub. Uses a swerve drive and 4 Limelight 4's to navigate and understand its position on the field. ",
    "lede": "Raid One's competition robot for the 2026 FRC season. Robot brought to Worlds 2026 to compete in Newton division after ranking 3rd at the Las Vegas regional. ",
    "highlights": [
     "Captain of the team for the 2026 FRC Season. ",
@@ -620,13 +621,13 @@ img.fig{opacity:.2;object-fit:contain}
    "year": "2026",
    "status": "Complete",
    "category": "Robotics",
-   "role": "Designer",
+   "role": "Designer/Builder",
    "tags": [
     "FRC",
     "Mechanical design",
     "CAD"
    ],
-   "summary": "Plays the 2026 FRC game \"Rebuilt\". A turret robot that holds over 45 6 inch diamter balls and shoots balls at 4 balls per second. Uses a swerve drive and 4 Limelight 4's to navigate and understand its position on the field. ",
+   "summary": "Plays the 2026 FRC game \"Rebuilt\". A turret robot that holds over 45 6 inch diamter balls and shoots balls at 4 balls per second into a central hub. Uses a swerve drive and 4 Limelight 4's to navigate and understand its position on the field. ",
    "lede": "Raid Zero's competition robot for the 2026 FRC season (Sister team of Raid One). Robot reached Quarterfinals at the Las Vegas regional, winning the Impact Award, qualifying to compete at FRC Worlds 2026.  ",
    "highlights": [
     "Redesigned the intake 3 separate times, leading the processes for design, fabrication, and assembly. \nDesigned the rotary power paired with hopper movement geometry as well as the intake roller power transmission chain. ",
@@ -721,13 +722,13 @@ img.fig{opacity:.2;object-fit:contain}
    "year": "2025",
    "status": "Complete",
    "category": "Robotics",
-   "role": "Design & build",
+   "role": "Designer/Builder",
    "tags": [
     "Prototyping",
     "Testing"
    ],
-   "summary": "A rapid-prototype rig for testing how much a shooter compresses the game piece.",
-   "lede": "",
+   "summary": "A rapid-prototype rig for testing optimal compression of the game piece.",
+   "lede": "Uses printer pulleys mounted on bearings and 4 Falcon motors to rapidly spin wheels, creating a system that is easily adjustable to change wheel diameter, wheel speed, torque, size, and rotation. ",
    "highlights": [
     "Full idea generation for more efficient compression testing for shooter games. ",
     "Design efficient modularity for different compressions, varying angles, varying speeds, varying torques, and any type of size to adapt for any type of match projectile and goal. ",
@@ -758,7 +759,7 @@ img.fig{opacity:.2;object-fit:contain}
    "draft": false,
    "org": "Combat robotics",
    "year": "2026",
-   "status": "In design",
+   "status": "In progress",
    "category": "Robotics",
    "role": "Design",
    "tags": [
@@ -785,7 +786,7 @@ img.fig{opacity:.2;object-fit:contain}
    "draft": false,
    "org": "Personal project",
    "year": "2026",
-   "status": "In design",
+   "status": "In progress",
    "category": "Hardware",
    "role": "Design",
    "tags": [
@@ -1230,7 +1231,7 @@ function workView() {
   if (!cats.includes(filter)) filter = "All";
   const list = vis.filter(x => filter === "All" || x.p.category === filter);
   // on the full list, the featured project already sits in the hero and in-design work gets its own row
-  const isSoon = x => /design|planning|coming/i.test(x.p.status || "");
+  const isSoon = x => /progress|design|planning|coming/i.test(x.p.status || "");
   const main = editing || filter !== "All" ? list : list.filter(x => !isSoon(x));
   const soon = editing || filter !== "All" ? [] : list.filter(x => isSoon(x));
   const benchList = S.projects.filter(p => p.spin && (editing || !p.draft));
@@ -1257,7 +1258,7 @@ function workView() {
         ${cats.map(c => `<button type="button" data-filter="${esc(c)}" aria-pressed="${c === filter}">${esc(c)}</button>`).join("")}</div>` : ""}
     </div>
     <div class="grid">${main.map(({ p, i }, n) => cardHtml(p, i, n, main.length % 2 === 1 && n === main.length - 1)).join("")}</div>
-    ${soon.length ? `<div class="sechead"><h2>On the way</h2></div><div class="grid">${soon.map(({ p, i }, n) => cardHtml(p, i, n)).join("")}</div>` : ""}
+    ${soon.length ? `<div class="sechead"><h2>In progress</h2></div><div class="grid">${soon.map(({ p, i }, n) => cardHtml(p, i, n)).join("")}</div>` : ""}
     ${editing ? `<div class="tools" style="margin-top:20px"><button class="tool" data-act="add-project">+ New project</button></div>` : ""}
   </div>`;
 }
@@ -2447,4 +2448,5 @@ else if (!REDUCED && !seen && S.site.intro !== "none" && (!location.hash || loca
   } catch {}
 })();
 })();
-</script></body></html>
+</script>
+</body></html>
