@@ -207,8 +207,9 @@ a.crow:hover{transform:translateX(3px);background:var(--surface-2)}
 .bench-of{font-variant-numeric:tabular-nums}
 .bench-view{position:relative;margin:4px -8px 0}
 .bench-stage{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;contain:paint;touch-action:pan-y;-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
-.bench-arrow{position:absolute;top:50%;z-index:5;width:34px;height:34px;margin-top:-17px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(72,90,106,.45);background:rgba(232,221,203,.86);color:#1C2B3D;font:400 22px/1 var(--display);padding:0 0 3px;cursor:pointer;opacity:0;transition:opacity .25s,background .2s,border-color .2s}
-.bench-arrow.prev{left:10px}.bench-arrow.next{right:10px}
+.bench-arrow{position:absolute;top:50%;z-index:5;width:34px;height:34px;margin-top:-17px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(72,90,106,.45);background:rgba(232,221,203,.86);color:#1C2B3D;padding:0;cursor:pointer;opacity:0;transition:opacity .25s,background .2s,border-color .2s}
+.bench-arrow.b-prev{left:10px}.bench-arrow.b-next{right:10px}
+.bench-arrow svg{display:block;width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .bench:hover .bench-arrow,.bench-arrow:focus-visible{opacity:1}
 .bench-arrow:hover{background:#E8DDCB;border-color:#485A6A}
 @media (hover:none),(pointer:coarse){.bench-arrow{opacity:.92;width:38px;height:38px;margin-top:-19px}}
@@ -1283,7 +1284,7 @@ function benchHtml(list) {
         <div class="bl spin front"></div><div class="bl spin"></div>
         <i class="cross" aria-hidden="true"></i><i class="scan" aria-hidden="true"></i>
       </a>
-      ${list.length > 1 ? `<button type="button" class="bench-arrow prev" data-b-step="-1" aria-label="Previous model">‹</button><button type="button" class="bench-arrow next" data-b-step="1" aria-label="Next model">›</button>` : ""}
+      ${list.length > 1 ? `<button type="button" class="bench-arrow b-prev" data-b-step="-1" aria-label="Previous model"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 3 5.5 8l5 5"/></svg></button><button type="button" class="bench-arrow b-next" data-b-step="1" aria-label="Next model"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 3l5 5-5 5"/></svg></button>` : ""}
     </div>
     <div class="bench-dim" aria-hidden="true"><i class="dl"></i><span data-b-dim>${esc(p.dims || "")}</span></div>
     <div class="bench-foot">
